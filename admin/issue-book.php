@@ -44,6 +44,12 @@ else {
             header('location: manage-issued-books.php');
         }
     }
+
+    // Fetch all books for dropdown
+    $sql = "SELECT BookId, BookName, ISBNNumber FROM tblbooks WHERE BookCount > 0";
+    $query = $dbh->prepare($sql);
+    $query->execute();
+    $books = $query->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <!DOCTYPE html>
@@ -79,19 +85,12 @@ else {
             });
         }
 
-        // function for getting book details
-        function getBook() {
-            $("#loaderIcon").show();
-            $.ajax({
-                url: "get_book.php",
-                data: 'bookid=' + $("#bookid").val(),
-                type: "POST",
-                success: function (data) {
-                    $("#get_book_name").html(data);
-                    $("#loaderIcon").hide();
-                },
-                error: function () { }
-            });
+        // Function to update ISBN when book is selected
+        function updateISBN() {
+            var selectElement = document.getElementById("bookdetails");
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var isbn = selectedOption.getAttribute("data-isbn");
+            document.getElementById("bookisbn").value = isbn || "";
         }
     </script>
     <style type="text/css">
@@ -127,11 +126,21 @@ else {
                                     <span id="get_student_name" style="font-size:16px;"></span> 
                                 </div>
                                 <div class="form-group">
-                                    <label>ISBN Number <span style="color:red;">*</span></label>
-                                    <input class="form-control" type="text" name="bookid" id="bookid" onBlur="getBook()" required="required" />
+                                    <label>Select Book <span style="color:red;">*</span></label>
+                                    <select class="form-control" name="bookdetails" id="bookdetails" onChange="updateISBN()" required="required">
+                                        <option value="">Select Book</option>
+                                        <?php 
+                                        if($query->rowCount() > 0) {
+                                            foreach($books as $book) {
+                                                echo "<option value='".$book->BookId."' data-isbn='".$book->ISBNNumber."'>".$book->BookName."</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control" name="bookdetails" id="get_book_name" readonly></select>
+                                    <label>ISBN Number</label>
+                                    <input class="form-control" type="text" name="bookisbn" id="bookisbn" readonly />
                                 </div>
                                 <button type="submit" name="issue" id="submit" class="btn btn-info">Issue Book</button>
                             </form>
