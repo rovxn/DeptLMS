@@ -16,7 +16,7 @@ else {
             $query = $dbh->prepare($sql);
             $query->bindParam(':id', $id, PDO::PARAM_STR);
             $query->execute();
-            $_SESSION['delmsg'] = "Author deleted";
+            $_SESSION['delmsg'] = "Category deleted";
             header('location:manage-categories.php');
         } catch (PDOException $e) {
             echo "<p>Error: " . $e->getMessage() . "</p>";
@@ -29,8 +29,8 @@ else {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Online Library Management System | Manage Authors</title>
+    <meta name="Category" content="" />
+    <title>Online Library Management System | Manage Categories</title>
     <!-- BOOTSTRAP CORE STYLE  -->
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FONT AWESOME STYLE  -->
@@ -51,7 +51,7 @@ else {
         <div class="container">
             <div class="row pad-botm">
                 <div class="col-md-12">
-                    <h4 class="header-line">Manage Authors</h4>
+                    <h4 class="header-line">Manage Categories</h4>
                 </div>
             </div>
             <div class="row">
@@ -97,7 +97,7 @@ else {
                     <!-- Advanced Tables -->
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Authors Listing
+                            Categories Listing
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
@@ -105,7 +105,7 @@ else {
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Author</th>
+                                            <th>Category Name</th>
                                             <th>Creation Date</th>
                                             <th>Updation Date</th>
                                             <th>Action</th>
@@ -126,7 +126,7 @@ else {
                                                     <td class="center"><?php echo htmlentities(isset($result->creationDate) ? $result->creationDate : ''); ?></td>
                                                     <td class="center"><?php echo htmlentities(isset($result->UpdationDate) ? $result->UpdationDate : ''); ?></td>
                                                     <td class="center">
-                                                        <a href="edit-author.php?athrid=<?php echo htmlentities($result->CatId);?>"><button class="btn btn-primary"><i class="fa fa-edit "></i> Edit</button></a>
+                                                        <a href="edit-Category.php?athrid=<?php echo htmlentities($result->CatId);?>"><button class="btn btn-primary"><i class="fa fa-edit "></i> Edit</button></a>
                                                         <a href="manage-categories.php?del=<?php echo htmlentities($result->CatId);?>" onclick="return confirm('Are you sure you want to delete?');"><button class="btn btn-danger"><i class="fa fa-pencil"></i> Delete</button></a>
                                                     </td>
                                                 </tr>
